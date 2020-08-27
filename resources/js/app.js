@@ -1,2 +1,3 @@
 require('./bootstrap');
-require('./sheldon')
+require('./sheldon');
+require('./mastermind');

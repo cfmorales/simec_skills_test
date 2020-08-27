@@ -48,3 +48,11 @@
   color: #607d8b;
 }
 
+.mastermind_game .table {
+  margin-top: 10px;
+}
+
+.mastermind_game .table .compared_data_tr {
+  background-color: #3f525c;
+}
+

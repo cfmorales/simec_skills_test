@@ -85,7 +85,7 @@
         <h1>Simec Skills Test</h1>
         <nav>
             <a href="#" data-toggle="modal" data-target="#current_user_modal">Lizard-Spock Expansion Rock</a>
-            <a href="#">Mastermind</a>
+            <a href="#" data-toggle="modal" data-target="#mastermind_current_user_modal">Mastermind</a>
             <a href="{{url('/')}}">Dashboard</a>
         </nav>
     </div>

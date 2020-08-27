@@ -22,4 +22,8 @@ Route::prefix('sheldon')->group(function () {
     Route::post('validateU', 'SheldonGameController@validateUser');
     Route::post('saveResults/{game_user}', 'SheldonGameController@update');
 });
-
+Route::prefix('mastermind')->group(function () {
+    Route::get('show/{game_user}', 'MasterMindGameController@show')->name('mastermind');
+    Route::post('validateU', 'MasterMindGameController@validateUser');
+    Route::post('saveResults/{game_user}', 'MasterMindGameController@update');
+});

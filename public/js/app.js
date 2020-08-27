@@ -19334,6 +19334,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./sheldon */ "./resources/js/sheldon.js");
 
+__webpack_require__(/*! ./mastermind */ "./resources/js/mastermind.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -19365,6 +19367,141 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/mastermind.js":
+/*!************************************!*\
+  !*** ./resources/js/mastermind.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+  // available boostrap colors
+  // primary
+  // success
+  // danger
+  // warning
+  // dark
+  // info
+  var rowCounter = 7;
+  var columnCounter = 4;
+  var randomColors = generateRandomColors();
+  console.log(randomColors);
+  $('.mastermind_game').find('.available_colors > button').click(function () {
+    //check when human click on specific colors
+    setHumanChoise($(this).data('color'));
+  });
+
+  function setHumanChoise(color) {
+    //set human choise in the table
+    $('.pos' + rowCounter).find('td:eq(' + columnCounter + ')').html('<button type="button" class="btn btn-' + color + '" data-color="' + color + '"></button>');
+    columnCounter++;
+  }
+
+  function generateRandomColors() {
+    //generate random color to start the game
+    var presavedElements = ['primary', 'success', 'danger', 'warning', 'dark', 'info'];
+    var randomedElements = [];
+
+    var _loop = function _loop(_i) {
+      var randomedElement = presavedElements[Math.floor(Math.random() * presavedElements.length)];
+      var findElement = randomedElements.find(function (element) {
+        return element === randomedElement;
+      });
+
+      if (findElement === undefined) {
+        randomedElements.push(randomedElement);
+      } else {
+        _i--;
+      }
+
+      i = _i;
+    };
+
+    for (var i = 0; i < 4; i++) {
+      _loop(i);
+    }
+
+    return randomedElements;
+  }
+
+  $('.check').click(function () {
+    if (columnCounter >= 8) {
+      var j = 0;
+      var evalResult = [];
+
+      var _loop2 = function _loop2(_i2) {
+        var tdColor = $('.pos' + rowCounter).find('td:eq(' + _i2 + ') button').data('color');
+
+        if (tdColor === randomColors[j]) {
+          $('.pos' + rowCounter).find('td:eq(' + j + ')').html('<button type="button" class="btn btn-dark" data-color="dark"></button>');
+          j++;
+          evalResult.push(true);
+        } else {
+          var findColor = randomColors.find(function (color) {
+            return color === tdColor;
+          });
+
+          if (findColor !== undefined) {
+            $('.pos' + rowCounter).find('td:eq(' + j + ')').html('<button type="button" class="btn btn-light" data-color="light"></button>');
+            j++;
+            evalResult.push(false);
+          } else {
+            j++;
+            evalResult.push(false);
+          }
+        }
+      };
+
+      for (var _i2 = 4; _i2 < 8; _i2++) {
+        _loop2(_i2);
+      }
+
+      columnCounter = 4;
+      rowCounter--;
+      var findFalse = evalResult.find(function (element) {
+        return element === false;
+      });
+
+      if (findFalse === undefined) {
+        saveResults(true);
+        alert('You Won');
+      } else {
+        if (rowCounter < 0) {
+          saveResults(false);
+          alert('You lost');
+        }
+      }
+    } else {
+      alert('Please complete the row');
+    }
+  });
+
+  function saveResults(winner) {
+    var spinner = $('.mastermind_game').find('.spinner-border');
+    spinner.prop('hidden', false);
+    $.ajaxSetup({
+      type: 'POST',
+      url: '/mastermind/saveResults/' + $('.game_user_id').text(),
+      headers: {
+        'X-CSRF-TOKEN': $('#token').val()
+      }
+    });
+    $.ajax({
+      data: {
+        'winner': winner
+      },
+      success: function success(data) {
+        spinner.prop('hidden', true);
+        $('.game_user_wins').text(data[0].wins);
+        $('.game_user_losses').text(data[0].losses);
+        $('.check').prop('disabled', true);
+      }
+    });
+  }
+});
 
 /***/ }),
 

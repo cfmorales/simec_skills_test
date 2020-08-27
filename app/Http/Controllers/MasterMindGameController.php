@@ -4,20 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Game;
 use App\User;
+use Validator;
 use Illuminate\Http\Request;
 
-use Validator;
-
-class SheldonGameController extends Controller
+class MasterMindGameController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param $game_user
      * @return \Illuminate\Http\Response
      */
-
-
     public function validateUser(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -32,12 +28,14 @@ class SheldonGameController extends Controller
             $user = User::firstOrCreate(['name' => $name]);
             $game_user = Game::firstOrCreate([
                 'user_id' => $user->id,
-                'name' => 'sheldon'
+                'name' => 'mastermind'
             ]);
-            return redirect()->route('sheldon', ['game_user' => $game_user]);
+            return redirect()->route('mastermind', ['game_user' => $game_user]);
 
         }
     }
+
+
     /**
      * Display the specified resource.
      *
@@ -47,9 +45,9 @@ class SheldonGameController extends Controller
     public function show($id)
     {
         $game_user = Game::findOrFail($id);
-        return view('sheldon', compact('game_user'));
-
+        return view('mastermind', compact('game_user'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -62,17 +60,18 @@ class SheldonGameController extends Controller
     {
         $game_user = Game::findOrFail($id);
         switch ($request->winner) {
-            case 'h':
+            case 'true':
                 $game_user->wins += 1;
                 $game_user->save();
                 return response()->json(array(['wins' => $game_user->wins, 'losses' => $game_user->losses]));
                 break;
-            case 'b':
+            case 'false':
                 $game_user->losses += 1;
                 $game_user->save();
                 return response()->json(array(['wins' => $game_user->wins, 'losses' => $game_user->losses]));
                 break;
         }
     }
+
 
 }

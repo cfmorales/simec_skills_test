@@ -14,7 +14,7 @@
 
             </a>
 
-            <a href="#" class="game_item">
+            <a href="#" class="game_item" data-toggle="modal" data-target="#mastermind_current_user_modal">
                 <div class="module">
                     <h4>Mastermind</h4>
                 </div>

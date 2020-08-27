@@ -14,5 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
+})->name('dashboard');
+
+Route::prefix('sheldon')->group(function () {
+    Route::get('show/{game_user}', 'SheldonGameController@show')->name('sheldon');
+    Route::post('validateU', 'SheldonGameController@validateUser');
+    Route::post('saveResults/{game_user}', 'SheldonGameController@update');
 });
+

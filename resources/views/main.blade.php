@@ -73,7 +73,7 @@
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <div class="top-right links">
         @isset($game_user)
-            <div>Current score
+            <div>Current score ->
                 <span>Name: {{$game_user->user->name}}</span>
                 Wins:<span class="game_user_wins">{{$game_user->wins}}</span>
                 Losses: <span class="game_user_losses">{{$game_user->losses}}</span>
